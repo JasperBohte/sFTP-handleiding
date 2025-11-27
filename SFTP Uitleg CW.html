@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Handleiding SFTP-verbinding (FileZilla)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --primary: #004b8d;
+      --primary-soft: #e5effa;
+      --border: #d0d7e2;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --accent: #0f766e;
+      --danger: #b91c1c;
+      --shadow-soft: 0 2px 6px rgba(15, 23, 42, 0.06);
+      --radius-lg: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #e5effa 0, #f5f7fb 45%, #ffffff 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--primary);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 12px 0 6px;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 640px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      border: 1px solid var(--border);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 0 0 10px;
+      color: var(--primary);
+    }
+
+    h3 {
+      font-size: 15px;
+      margin: 14px 0 6px;
+    }
+
+    p {
+      margin: 4px 0 10px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    ol {
+      padding-left: 20px;
+      margin: 8px 0;
+    }
+
+    li {
+      margin: 4px 0 6px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .inline-code {
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .note,
+    .tip,
+    .warning {
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 8px 0;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .note {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      color: var(--muted);
+    }
+
+    .tip {
+      background: #ecfdf3;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+    }
+
+    .warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: var(--danger);
+    }
+
+    .note-icon {
+      font-size: 16px;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #1d4ed8;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px 18px;
+      margin-top: 6px;
+    }
+
+    .key-value {
+      font-size: 14px;
+    }
+
+    .key-label {
+      font-weight: 600;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 2px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .footer {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        SFTP handleiding
+      </div>
+      <h1>Bestanden uitwisselen via SFTP (FileZilla)</h1>
+      <p class="subtitle">
+        In deze handleiding lees je stap voor stap hoe je een veilige SFTP-verbinding maakt met onze server via FileZilla, en hoe je vervolgens bestanden met ons kunt delen.
+      </p>
+    </header>
+
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          Voorbereiding
+        </h2>
+        <span class="pill">
+          <span class="pill-dot"></span>
+          Ongeveer 5 minuten
+        </span>
+      </div>
+
+      <p>Voor het starten heb je het volgende nodig:</p>
+      <ul>
+        <li>Een computer met internetverbinding (bij voorkeur Windows).</li>
+        <li>De gratis <strong>FileZilla Client</strong>.</li>
+        <li>Je persoonlijke SFTP-inloggegevens:
+          <span class="inline-code">[gebruikersnaam]</span> en
+          <span class="inline-code">[wachtwoord]</span>.
+        </li>
+      </ul>
+
+      <div class="tip">
+        <div class="note-icon">💡</div>
+        <div>
+          <strong>Let op:</strong> je gebruikersnaam en wachtwoord ontvang je van ons via een apart en veilig kanaal. Bewaar deze gegevens zorgvuldig en deel ze niet met derden.
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <span class="step-number">1</span> FileZilla installeren
+        </h2>
+      </div>
+      <ol>
+        <li>Ga naar de officiële website: <a href="https://filezilla-project.org" target="_blank" rel="noopener noreferrer">https://filezilla-project.org</a>.</li>
+        <li>Klik op <strong>Download FileZilla Client</strong>.</li>
+        <li>Kies de juiste versie voor jouw besturingssysteem (bijvoorbeeld Windows).</li>
+        <li>Download en installeer de FileZilla Client door de installatiewizard te volgen.</li>
+        <li>Start daarna de <strong>FileZilla Client</strong>.</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <span class="step-number">2</span> Een SFTP-site instellen in FileZilla
+        </h2>
+      </div>
+
+      <p>We maken nu een vaste verbinding (site) aan in FileZilla, zodat je niet telkens alles opnieuw hoeft in te vullen.</p>
+
+      <ol>
+        <li>Klik linksboven in FileZilla op het pictogram <strong>“Sitebeheer openen”</strong>
+          (of gebruik <span class="inline-code">Ctrl + S</span>).</li>
+        <li>Klik onderaan op <strong>“Nieuwe site”</strong> en geef deze bijvoorbeeld de naam
+          <em>“SFTP [projectnaam]”</em>.</li>
+        <li>Vul de instellingen als volgt in:</li>
+      </ol>
+
+      <div class="grid-two">
+        <div class="key-value">
+          <span class="key-label">Protocol</span>
+          <span class="inline-code">SFTP - SSH File Transfer Protocol</span>
+        </div>
+        <div class="key-value">
+          <span class="key-label">Host</span>
+          <span class="inline-code">[Server IP – verstrekt via e-mail]</span>
+        </div>
+        <div class="key-value">
+          <span class="key-label">Poort</span>
+          <span class="inline-code">22</span> (standaard SFTP-poort)
+        </div>
+        <div class="key-value">
+          <span class="key-label">Versleuteling</span>
+          <span class="inline-code">Gebruik expliciete FTP over TLS indien beschikbaar</span> of
+          laat de standaardinstelling staan.
+        </div>
+        <div class="key-value">
+          <span class="key-label">Inlogtype</span>
+          <span class="inline-code">Normaal</span>
+        </div>
+        <div class="key-value">
+          <span class="key-label">Gebruiker</span>
+          <span class="inline-code">[gebruikersnaam]</span>
+        </div>
+        <div class="key-value">
+          <span class="key-label">Wachtwoord</span>
+          <span class="inline-code">[wachtwoord]</span>
+        </div>
+      </div>
+
+      <ol start="4">
+        <li>Controleer de gegevens en klik vervolgens op <strong>“Verbinden”</strong>.</li>
+      </ol>
+
+      <div class="note">
+        <div class="note-icon">ℹ️</div>
+        <div>
+          Wanneer FileZilla voor het eerst verbinding maakt, kan er een melding verschijnen over de server-sleutel (host key). Controleer of dit verwacht is en klik op
+          <strong>“OK”</strong> om verder te gaan.
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <span class="step-number">3</span> Navigeren naar de juiste map
+        </h2>
+      </div>
+
+      <p>Na het verbinden zie je in het rechterdeel van FileZilla de mappenstructuur van onze server.</p>
+
+      <ol>
+        <li>Zoek de map <strong><span class="inline-code">[projectnaam]</span></strong> in het rechterpaneel.</li>
+        <li>Dubbelklik op <strong>[projectnaam]</strong> om deze te openen.</li>
+        <li>Hier vind je onder andere de map <strong><span class="inline-code">Aanlevering</span></strong>.</li>
+      </ol>
+
+      <div class="tip">
+        <div class="note-icon">📁</div>
+        <div>
+          Denk aan de rechterzijde van FileZilla als “onze kant” (de server) en aan de linkerzijde als “jullie kant” (jullie eigen computer/netwerk).
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <span class="step-number">4</span> Bestanden aanleveren en downloaden
+        </h2>
+      </div>
+
+      <h3>Bestanden naar ons aanleveren</h3>
+      <ol>
+        <li>Open in het rechterpaneel de map <strong><span class="inline-code">Aanlevering</span></strong> binnen <strong>[projectnaam]</strong>.</li>
+        <li>Open in het linkerpaneel de map op jullie eigen systeem waarin de bestanden staan die je wilt aanleveren.</li>
+        <li>Sleep de gewenste bestanden of mappen vanuit het linkerpaneel (jullie computer) naar het rechterpaneel (de map <strong>Aanlevering</strong>).</li>
+        <li>Wacht tot alle overdrachten onderin FileZilla als voltooid gemarkeerd zijn.</li>
+      </ol>
+
+      <h3>Bestanden van ons downloaden</h3>
+      <ol>
+        <li>Navigeer in het rechterpaneel naar de map waarin wij bestanden voor jullie hebben klaargezet (bijvoorbeeld binnen <strong><span class="inline-code">[projectnaam]</span></strong>).</li>
+        <li>Klik met de rechtermuisknop op het gewenste bestand of de map.</li>
+        <li>Kies <strong>“Downloaden”</strong>.</li>
+        <li>Het bestand wordt nu naar de map in het linkerpaneel gedownload.</li>
+      </ol>
+
+      <div class="note">
+        <div class="note-icon">✅</div>
+        <div>
+          Controleer na het downloaden of het bestand volledig en correct geopend kan worden in het programma waarmee jullie het willen gebruiken.
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          Hulp nodig?
+        </h2>
+      </div>
+      <p>
+        Kom je er niet uit of krijg je een foutmelding bij het verbinden of overzetten van bestanden?
+      </p>
+      <ul>
+        <li>Maak een screenshot van de foutmelding (indien mogelijk).</li>
+        <li>Noteer welke stappen je hebt uitgevoerd.</li>
+        <li>Neem contact met ons op zodat we met je mee kunnen kijken.</li>
+      </ul>
+
+      <p class="footer">
+        Je kunt eenvoudig een afspraak met ons inplannen via de bekende boekingslink onderaan onze e-mails. Tijdens een korte (online) sessie lopen we alles graag met je door.
+      </p>
+    </section>
+  </div>
+</body>
+</html>
